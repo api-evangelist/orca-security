@@ -1,106 +1,101 @@
 aid: orca-security
 name: Orca Security
-description: >-
-  Orca Security is an agentless cloud security platform that uses its patented
-  SideScanning technology to provide visibility into risks across AWS, Azure,
-  Google Cloud, Oracle Cloud, Kubernetes, and serverless environments,
-  covering CSPM, CWPP, CIEM, DSPM, vulnerability management, malware
-  detection, API security, and AI security in a single platform. Orca exposes
-  a region-aware REST API for assets, alerts, integrations, automations, and
-  user management, plus SCIM 2.0 for identity provisioning and a Terraform
-  provider for infrastructure-as-code workflows.
+description: Orca Security is an agentless cloud security platform that uses its patented
+  SideScanning technology to provide visibility into risks across AWS, Azure, Google
+  Cloud, Oracle Cloud, Kubernetes, and serverless environments, covering CSPM, CWPP,
+  CIEM, DSPM, vulnerability management, malware detection, API security, and AI security
+  in a single platform. Orca exposes a region-aware REST API for assets, alerts, integrations,
+  automations, and user management, plus SCIM 2.0 for identity provisioning and a
+  Terraform provider for infrastructure-as-code workflows.
 kind: company
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-  - Agentless
-  - API Security
-  - CIEM
-  - Cloud Security
-  - CNAPP
-  - CSPM
-  - CWPP
-  - DSPM
-  - SideScanning
-  - Vulnerability Management
-url: >-
-  https://raw.githubusercontent.com/api-evangelist/orca-security/refs/heads/main/apis.yml
+- Agentless
+- API Security
+- CIEM
+- Cloud Security
+- CNAPP
+- CSPM
+- CWPP
+- DSPM
+- SideScanning
+- Vulnerability Management
+url: https://raw.githubusercontent.com/api-evangelist/orca-security/refs/heads/main/apis.yml
 created: '2026-05-23'
 modified: '2026-05-23'
 specificationVersion: '0.19'
 apis:
-  - aid: orca-security:orca-security-rest-api
-    name: Orca Security REST API
-    description: >-
-      Orca Security's REST API provides programmatic access to the Orca Cloud
-      Security Platform for querying cloud inventory and assets, managing
-      alerts and risk findings, configuring integrations and automations,
-      running queries against the unified data model, and managing users,
-      groups, and business units. The API is region-specific and uses
-      API tokens generated from the Orca console with an
-      "Authorization: Token <value>" header.
-    humanURL: https://docs.orcasecurity.io/
-    tags:
-      - Alerts
-      - Assets
-      - Automations
-      - Cloud Security
-      - Integrations
-      - REST API
-    properties:
-      - type: Documentation
-        url: https://docs.orcasecurity.io/
-      - type: APIReference
-        url: https://app.orcasecurity.io/api-doc
-      - type: Authentication
-        url: https://docs.orcasecurity.io/docs/orca-api
-      - type: TerraformProvider
-        url: https://registry.terraform.io/providers/orcasecurity/orcasecurity/latest/docs
-  - aid: orca-security:orca-security-scim-api
-    name: Orca Security SCIM 2.0 API
-    description: >-
-      SCIM 2.0 endpoint for provisioning and de-provisioning users and groups
-      in Orca Security from identity providers such as Okta, Azure AD, and
-      OneLogin.
-    humanURL: https://docs.orcasecurity.io/
-    tags:
-      - Identity
-      - Provisioning
-      - SCIM
-      - User Management
-    properties:
-      - type: Documentation
-        url: https://docs.orcasecurity.io/
-common:
-  - type: Website
-    url: https://orca.security/
-  - type: Platform
-    url: https://orca.security/platform/
+- aid: orca-security:orca-security-rest-api
+  name: Orca Security REST API
+  description: 'Orca Security''s REST API provides programmatic access to the Orca
+    Cloud Security Platform for querying cloud inventory and assets, managing alerts
+    and risk findings, configuring integrations and automations, running queries against
+    the unified data model, and managing users, groups, and business units. The API
+    is region-specific and uses API tokens generated from the Orca console with an
+    "Authorization: Token <value>" header.'
+  humanURL: https://docs.orcasecurity.io/
+  tags:
+  - Alerts
+  - Assets
+  - Automations
+  - Cloud Security
+  - Integrations
+  - REST API
+  properties:
   - type: Documentation
     url: https://docs.orcasecurity.io/
-  - type: Login
-    url: https://app.orcasecurity.io/
-  - type: RegionSelection
-    url: https://region-selection.orcasecurity.io/
+  - type: APIReference
+    url: https://app.orcasecurity.io/api-doc
+  - type: Authentication
+    url: https://docs.orcasecurity.io/docs/orca-api
   - type: TerraformProvider
-    url: https://registry.terraform.io/providers/orcasecurity/orcasecurity/latest
-  - type: TrustCenter
-    url: https://trust.orca.security/
-  - type: Blog
-    url: https://orca.security/resources/blog/
-  - type: Resources
-    url: https://orca.security/resources/
-  - type: Customers
-    url: https://orca.security/customers/
-  - type: Partners
-    url: https://orca.security/partners/
-  - type: Careers
-    url: https://orca.security/company/careers/
-  - type: AboutUs
-    url: https://orca.security/company/
-  - type: ContactSales
-    url: https://orca.security/contact-us/
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/orca-security/
+    url: https://registry.terraform.io/providers/orcasecurity/orcasecurity/latest/docs
+  - url: graphql/orca-security-graphql.md
+    type: GraphQL
+- aid: orca-security:orca-security-scim-api
+  name: Orca Security SCIM 2.0 API
+  description: SCIM 2.0 endpoint for provisioning and de-provisioning users and groups
+    in Orca Security from identity providers such as Okta, Azure AD, and OneLogin.
+  humanURL: https://docs.orcasecurity.io/
+  tags:
+  - Identity
+  - Provisioning
+  - SCIM
+  - User Management
+  properties:
+  - type: Documentation
+    url: https://docs.orcasecurity.io/
+common:
+- type: Website
+  url: https://orca.security/
+- type: Platform
+  url: https://orca.security/platform/
+- type: Documentation
+  url: https://docs.orcasecurity.io/
+- type: Login
+  url: https://app.orcasecurity.io/
+- type: RegionSelection
+  url: https://region-selection.orcasecurity.io/
+- type: TerraformProvider
+  url: https://registry.terraform.io/providers/orcasecurity/orcasecurity/latest
+- type: TrustCenter
+  url: https://trust.orca.security/
+- type: Blog
+  url: https://orca.security/resources/blog/
+- type: Resources
+  url: https://orca.security/resources/
+- type: Customers
+  url: https://orca.security/customers/
+- type: Partners
+  url: https://orca.security/partners/
+- type: Careers
+  url: https://orca.security/company/careers/
+- type: AboutUs
+  url: https://orca.security/company/
+- type: ContactSales
+  url: https://orca.security/contact-us/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/orca-security/
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com

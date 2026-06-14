@@ -1,0 +1,1198 @@
+"""
+Orca Security GraphQL Schema
+Conceptual schema derived from the Orca Security REST API.
+Source: https://docs.orcasecurity.io/docs/api-overview
+"""
+
+# ─── Scalars ────────────────────────────────────────────────────────────────
+
+scalar DateTime
+scalar JSON
+scalar URL
+scalar Float
+
+# ─── Enumerations ───────────────────────────────────────────────────────────
+
+enum AssetType {
+  VM
+  CONTAINER
+  STORAGE
+  DATABASE
+  FUNCTION
+  NETWORK
+  LOAD_BALANCER
+  KUBERNETES_NODE
+  KUBERNETES_POD
+  KUBERNETES_CLUSTER
+  IAM_USER
+  IAM_ROLE
+  DNS_RECORD
+  CERTIFICATE
+  SNAPSHOT
+  IMAGE
+  SERVERLESS
+  API_GATEWAY
+  UNKNOWN
+}
+
+enum CloudProviderName {
+  AWS
+  AZURE
+  GCP
+  OCI
+  ALIBABA
+  UNKNOWN
+}
+
+enum AlertSeverityLevel {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+  INFORMATIONAL
+}
+
+enum AlertStatusValue {
+  OPEN
+  IN_PROGRESS
+  DISMISSED
+  RESOLVED
+  SNOOZED
+}
+
+enum AlertCategoryName {
+  CSPM
+  CWPP
+  CIEM
+  DSPM
+  VULNERABILITY
+  MALWARE
+  BEST_PRACTICE
+  LATERAL_MOVEMENT
+  ATTACK_PATH
+  SECRETS
+}
+
+enum ComplianceStatusValue {
+  PASS
+  FAIL
+  NOT_APPLICABLE
+  MANUAL_REVIEW
+  UNKNOWN
+}
+
+enum RemediationStatusValue {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  ACCEPTED_RISK
+  WONT_FIX
+}
+
+enum ExploitMaturity {
+  NOT_DEFINED
+  UNPROVEN
+  PROOF_OF_CONCEPT
+  FUNCTIONAL
+  HIGH
+}
+
+enum FindingTypeValue {
+  CONFIGURATION
+  VULNERABILITY
+  PERMISSION
+  EXPOSURE
+  DATA_RISK
+  IDENTITY_RISK
+  NETWORK_RISK
+  COMPLIANCE
+}
+
+enum IntegrationType {
+  JIRA
+  SLACK
+  PAGERDUTY
+  SERVICENOW
+  SPLUNK
+  DATADOG
+  AZURE_SENTINEL
+  AWS_SECURITY_HUB
+  WEBHOOK
+  EMAIL
+  TEAMS
+  OPSGENIE
+}
+
+enum DataSensitivity {
+  PUBLIC
+  INTERNAL
+  CONFIDENTIAL
+  RESTRICTED
+  UNKNOWN
+}
+
+enum IAMPermissionLevel {
+  READ
+  WRITE
+  ADMIN
+  FULL_ACCESS
+  NONE
+}
+
+# ─── Interfaces ─────────────────────────────────────────────────────────────
+
+interface Asset {
+  id: ID!
+  name: String!
+  assetType: AssetType!
+  cloudProvider: CloudProviderName!
+  cloudAccount: CloudAccount!
+  region: String!
+  tags: [Tag!]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+interface BaseAlert {
+  id: ID!
+  title: String!
+  severity: AlertSeverity!
+  status: AlertStatus!
+  asset: CloudAsset
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ─── Supporting Types ────────────────────────────────────────────────────────
+
+type Tag {
+  key: String!
+  value: String
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+  totalCount: Int!
+}
+
+# ─── Cloud Provider and Account ──────────────────────────────────────────────
+
+type CloudProvider {
+  name: CloudProviderName!
+  displayName: String!
+  accounts: [CloudAccount!]
+  regions: [String!]
+}
+
+type CloudAccount {
+  id: ID!
+  name: String!
+  externalId: String!
+  provider: CloudProvider!
+  status: String!
+  assetCount: Int!
+  alertCount: Int!
+  riskScore: RiskScore
+  scanStatus: String
+  lastScannedAt: DateTime
+  createdAt: DateTime!
+  tags: [Tag!]
+}
+
+# ─── Asset Types ─────────────────────────────────────────────────────────────
+
+type CloudAsset implements Asset {
+  id: ID!
+  name: String!
+  assetType: AssetType!
+  cloudProvider: CloudProviderName!
+  cloudAccount: CloudAccount!
+  region: String!
+  tags: [Tag!]
+  createdAt: DateTime
+  updatedAt: DateTime
+  orcaScore: Float
+  riskScore: RiskScore
+  alerts: [Alert!]
+  alertCount: Int!
+  vulnerabilities: [Vulnerability!]
+  vulnerabilityCount: Int!
+  compliance: [ComplianceStatus!]
+  complianceFindingCount: Int!
+  internetFacing: Boolean!
+  configuration: JSON
+}
+
+type AssetDetails {
+  asset: CloudAsset!
+  metadata: JSON
+  configuration: JSON
+  networkInterfaces: [NetworkInterface!]
+  iamAttachments: [IAMAttachment!]
+  installedPackages: [InstalledPackage!]
+  dataClassification: DataClassification
+}
+
+type AssetType {
+  name: String!
+  displayName: String!
+  count: Int!
+}
+
+type VM implements Asset {
+  id: ID!
+  name: String!
+  assetType: AssetType!
+  cloudProvider: CloudProviderName!
+  cloudAccount: CloudAccount!
+  region: String!
+  tags: [Tag!]
+  createdAt: DateTime
+  updatedAt: DateTime
+  instanceType: String
+  operatingSystem: String
+  osVersion: String
+  imageId: String
+  publicIpAddress: String
+  privateIpAddress: String
+  state: String
+  internetFacing: Boolean!
+  installedPackages: [InstalledPackage!]
+  vulnerabilities: [Vulnerability!]
+  alerts: [Alert!]
+  riskScore: RiskScore
+}
+
+type Container implements Asset {
+  id: ID!
+  name: String!
+  assetType: AssetType!
+  cloudProvider: CloudProviderName!
+  cloudAccount: CloudAccount!
+  region: String!
+  tags: [Tag!]
+  createdAt: DateTime
+  updatedAt: DateTime
+  image: String!
+  imageId: String
+  registry: String
+  cluster: String
+  namespace: String
+  podName: String
+  runtime: String
+  state: String
+  vulnerabilities: [Vulnerability!]
+  alerts: [Alert!]
+  riskScore: RiskScore
+}
+
+type Storage implements Asset {
+  id: ID!
+  name: String!
+  assetType: AssetType!
+  cloudProvider: CloudProviderName!
+  cloudAccount: CloudAccount!
+  region: String!
+  tags: [Tag!]
+  createdAt: DateTime
+  updatedAt: DateTime
+  bucketType: String
+  sizeBytes: Float
+  objectCount: Int
+  publiclyAccessible: Boolean!
+  encryptionEnabled: Boolean!
+  versioningEnabled: Boolean!
+  dataAssets: [DataAsset!]
+  alerts: [Alert!]
+  riskScore: RiskScore
+  sensitivity: DataSensitivity
+}
+
+type Database implements Asset {
+  id: ID!
+  name: String!
+  assetType: AssetType!
+  cloudProvider: CloudProviderName!
+  cloudAccount: CloudAccount!
+  region: String!
+  tags: [Tag!]
+  createdAt: DateTime
+  updatedAt: DateTime
+  engine: String
+  engineVersion: String
+  instanceClass: String
+  publiclyAccessible: Boolean!
+  encryptionEnabled: Boolean!
+  multiAz: Boolean
+  backupEnabled: Boolean!
+  port: Int
+  alerts: [Alert!]
+  riskScore: RiskScore
+  dataAssets: [DataAsset!]
+}
+
+type Function implements Asset {
+  id: ID!
+  name: String!
+  assetType: AssetType!
+  cloudProvider: CloudProviderName!
+  cloudAccount: CloudAccount!
+  region: String!
+  tags: [Tag!]
+  createdAt: DateTime
+  updatedAt: DateTime
+  runtime: String
+  handler: String
+  memoryMb: Int
+  timeoutSeconds: Int
+  triggers: [String!]
+  internetFacing: Boolean!
+  iamRole: IAMRole
+  alerts: [Alert!]
+  vulnerabilities: [Vulnerability!]
+  riskScore: RiskScore
+}
+
+type Network implements Asset {
+  id: ID!
+  name: String!
+  assetType: AssetType!
+  cloudProvider: CloudProviderName!
+  cloudAccount: CloudAccount!
+  region: String!
+  tags: [Tag!]
+  createdAt: DateTime
+  updatedAt: DateTime
+  cidrBlock: String
+  vpcId: String
+  subnets: [Subnet!]
+  securityGroups: [SecurityGroup!]
+  internetGateway: Boolean!
+  alerts: [Alert!]
+  riskScore: RiskScore
+}
+
+type LoadBalancer implements Asset {
+  id: ID!
+  name: String!
+  assetType: AssetType!
+  cloudProvider: CloudProviderName!
+  cloudAccount: CloudAccount!
+  region: String!
+  tags: [Tag!]
+  createdAt: DateTime
+  updatedAt: DateTime
+  loadBalancerType: String
+  scheme: String
+  dnsName: String
+  internetFacing: Boolean!
+  tlsEnabled: Boolean!
+  tlsCertificates: [String!]
+  listeners: [Listener!]
+  alerts: [Alert!]
+  riskScore: RiskScore
+}
+
+type NetworkInterface {
+  id: ID!
+  privateIpAddress: String
+  publicIpAddress: String
+  subnetId: String
+  vpcId: String
+  securityGroups: [SecurityGroup!]
+}
+
+type Subnet {
+  id: ID!
+  cidrBlock: String!
+  availabilityZone: String
+  publicSubnet: Boolean!
+}
+
+type SecurityGroup {
+  id: ID!
+  name: String!
+  description: String
+  inboundRules: [FirewallRule!]
+  outboundRules: [FirewallRule!]
+}
+
+type FirewallRule {
+  protocol: String!
+  portRange: String
+  source: String!
+  description: String
+}
+
+type Listener {
+  port: Int!
+  protocol: String!
+  sslPolicy: String
+}
+
+type InstalledPackage {
+  name: String!
+  version: String!
+  packageManager: String
+  vulnerabilities: [Vulnerability!]
+}
+
+type IAMAttachment {
+  type: String!
+  resourceId: String!
+  name: String!
+  permissionLevel: IAMPermissionLevel
+}
+
+type DataClassification {
+  sensitivity: DataSensitivity!
+  piiDetected: Boolean!
+  secretsDetected: Boolean!
+  categories: [String!]
+}
+
+# ─── Alerts ──────────────────────────────────────────────────────────────────
+
+type Alert implements BaseAlert {
+  id: ID!
+  title: String!
+  severity: AlertSeverity!
+  status: AlertStatus!
+  asset: CloudAsset
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  category: AlertCategory!
+  alertType: AlertType!
+  description: String
+  recommendation: String
+  ruleId: String
+  score: Float
+  tags: [Tag!]
+}
+
+type AlertDetails {
+  alert: Alert!
+  asset: CloudAsset
+  evidence: JSON
+  remediation: FindingRemediation
+  relatedAlerts: [Alert!]
+  attackPaths: [AttackPath!]
+  history: [AlertHistoryEntry!]
+}
+
+type AlertHistoryEntry {
+  timestamp: DateTime!
+  action: String!
+  actor: String
+  previousStatus: AlertStatusValue
+  newStatus: AlertStatusValue
+  comment: String
+}
+
+type AlertStatus {
+  value: AlertStatusValue!
+  updatedAt: DateTime
+  updatedBy: String
+  comment: String
+}
+
+type AlertSeverity {
+  level: AlertSeverityLevel!
+  score: Float
+}
+
+type AlertCategory {
+  name: AlertCategoryName!
+  displayName: String!
+  description: String
+}
+
+type AlertType {
+  id: ID!
+  name: String!
+  category: AlertCategory!
+  description: String
+  recommendation: String
+  complianceFrameworks: [Framework!]
+}
+
+type AlertConnection {
+  nodes: [Alert!]!
+  pageInfo: PageInfo!
+}
+
+# ─── Risk ────────────────────────────────────────────────────────────────────
+
+type Risk {
+  id: ID!
+  asset: CloudAsset!
+  score: RiskScore!
+  factors: [RiskFactor!]!
+  attackPaths: [AttackPath!]
+  topAlerts: [Alert!]
+  updatedAt: DateTime!
+}
+
+type RiskScore {
+  value: Float!
+  normalizedValue: Float!
+  trend: String
+  previousValue: Float
+  components: [RiskScoreComponent!]
+}
+
+type RiskScoreComponent {
+  name: String!
+  weight: Float!
+  score: Float!
+  description: String
+}
+
+type RiskFactor {
+  id: ID!
+  name: String!
+  description: String!
+  impact: Float!
+  category: String!
+  mitigatable: Boolean!
+}
+
+# ─── Vulnerabilities ─────────────────────────────────────────────────────────
+
+type Vulnerability {
+  id: ID!
+  cve: CVE
+  packageName: String!
+  packageVersion: String!
+  fixedVersion: String
+  severity: AlertSeverityLevel!
+  score: CVSSScore
+  exploitAvailability: ExploitAvailability
+  asset: CloudAsset
+  discoveredAt: DateTime!
+  publishedAt: DateTime
+  status: String
+  orcaScore: Float
+}
+
+type CVE {
+  id: ID!
+  cveId: String!
+  description: String!
+  publishedAt: DateTime
+  modifiedAt: DateTime
+  cvssV2Score: CVSSScore
+  cvssV3Score: CVSSScore
+  exploitAvailability: ExploitAvailability
+  references: [URL!]
+  affectedPackages: [String!]
+  cweIds: [String!]
+}
+
+type CVSSScore {
+  version: String!
+  baseScore: Float!
+  vector: String!
+  impactScore: Float
+  exploitabilityScore: Float
+  attackVector: String
+  attackComplexity: String
+  privilegesRequired: String
+  userInteraction: String
+  scope: String
+  confidentialityImpact: String
+  integrityImpact: String
+  availabilityImpact: String
+}
+
+type ExploitAvailability {
+  available: Boolean!
+  maturity: ExploitMaturity!
+  sources: [String!]
+  lastSeen: DateTime
+}
+
+# ─── Compliance ──────────────────────────────────────────────────────────────
+
+type Compliance {
+  id: ID!
+  cloudAccount: CloudAccount
+  asset: CloudAsset
+  framework: Framework!
+  overallStatus: ComplianceStatusValue!
+  passCount: Int!
+  failCount: Int!
+  notApplicableCount: Int!
+  score: Float
+  controls: [FrameworkControl!]
+  findings: [Finding!]
+  lastAssessedAt: DateTime
+}
+
+type Framework {
+  id: ID!
+  name: String!
+  version: String
+  description: String
+  category: String
+  controls: [FrameworkControl!]
+  controlCount: Int!
+  orcaSupported: Boolean!
+}
+
+type FrameworkControl {
+  id: ID!
+  controlId: String!
+  title: String!
+  description: String
+  framework: Framework!
+  severity: AlertSeverityLevel
+  status: ComplianceStatusValue
+  findings: [Finding!]
+  remediation: FindingRemediation
+}
+
+type ComplianceStatus {
+  framework: Framework!
+  status: ComplianceStatusValue!
+  score: Float
+  passCount: Int!
+  failCount: Int!
+  checkedAt: DateTime
+}
+
+type Finding {
+  id: ID!
+  title: String!
+  description: String!
+  findingType: FindingType!
+  severity: AlertSeverityLevel!
+  status: ComplianceStatusValue!
+  asset: CloudAsset
+  control: FrameworkControl
+  evidence: JSON
+  remediation: FindingRemediation
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type FindingType {
+  value: FindingTypeValue!
+  displayName: String!
+  description: String
+}
+
+type FindingRemediation {
+  summary: String!
+  steps: [RemediationStep!]!
+  documentationUrl: URL
+  automationAvailable: Boolean!
+  estimatedEffort: String
+}
+
+# ─── Policies and Remediations ───────────────────────────────────────────────
+
+type Policy {
+  id: ID!
+  name: String!
+  description: String
+  category: AlertCategoryName!
+  severity: AlertSeverityLevel!
+  enabled: Boolean!
+  custom: Boolean!
+  rule: JSON
+  complianceFrameworks: [Framework!]
+  violations: [PolicyViolation!]
+  violationCount: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PolicyViolation {
+  id: ID!
+  policy: Policy!
+  asset: CloudAsset!
+  severity: AlertSeverityLevel!
+  status: RemediationStatusValue!
+  evidence: JSON
+  remediation: Remediation
+  detectedAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Remediation {
+  id: ID!
+  alert: Alert
+  violation: PolicyViolation
+  status: RemediationStatus!
+  assignee: User
+  dueDate: DateTime
+  steps: [RemediationStep!]!
+  notes: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type RemediationStatus {
+  value: RemediationStatusValue!
+  updatedAt: DateTime!
+  updatedBy: String
+  reason: String
+}
+
+type RemediationStep {
+  order: Int!
+  title: String!
+  description: String!
+  command: String
+  documentationUrl: URL
+  automatable: Boolean!
+}
+
+# ─── Discovery ───────────────────────────────────────────────────────────────
+
+type Discovery {
+  id: ID!
+  cloudAccount: CloudAccount!
+  startedAt: DateTime!
+  completedAt: DateTime
+  status: String!
+  assetsDiscovered: Int
+  newAssets: Int
+  removedAssets: Int
+  alertsGenerated: Int
+  errors: [String!]
+}
+
+# ─── Attack Paths ─────────────────────────────────────────────────────────────
+
+type AttackPath {
+  id: ID!
+  title: String!
+  description: String
+  severity: AlertSeverityLevel!
+  riskScore: Float!
+  nodes: [AttackNode!]!
+  edges: [AttackEdge!]!
+  entryPoints: [AttackNode!]!
+  targetAsset: CloudAsset
+  attackSurface: AttackSurface
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type AttackNode {
+  id: ID!
+  nodeType: String!
+  asset: CloudAsset
+  alert: Alert
+  finding: Finding
+  label: String!
+  description: String
+  severity: AlertSeverityLevel
+  internetFacing: Boolean
+}
+
+type AttackEdge {
+  id: ID!
+  sourceNode: AttackNode!
+  targetNode: AttackNode!
+  relationship: String!
+  description: String
+  weight: Float
+}
+
+type AttackSurface {
+  id: ID!
+  cloudAccount: CloudAccount!
+  internetFacingAssets: [CloudAsset!]!
+  internetFacingCount: Int!
+  criticalAssets: [CloudAsset!]!
+  attackPaths: [AttackPath!]!
+  riskScore: RiskScore!
+  updatedAt: DateTime!
+}
+
+# ─── Data Security ────────────────────────────────────────────────────────────
+
+type DataAsset {
+  id: ID!
+  asset: CloudAsset!
+  path: String
+  sensitivity: DataSensitivity!
+  categories: [String!]!
+  sizeBytes: Float
+  objectCount: Int
+  piiDetected: Boolean!
+  secretsDetected: Boolean!
+  piiFindings: [PIIData!]
+  secretsFindings: [Secrets!]
+  classifiedAt: DateTime!
+}
+
+type Sensitive {
+  id: ID!
+  dataAsset: DataAsset!
+  category: String!
+  confidence: Float!
+  sampleCount: Int
+  description: String
+  regulatoryFrameworks: [String!]
+}
+
+type PIIData {
+  id: ID!
+  dataAsset: DataAsset!
+  piiType: String!
+  confidence: Float!
+  sampleCount: Int
+  regulatoryImplication: String
+  detectedAt: DateTime!
+}
+
+type Secrets {
+  id: ID!
+  dataAsset: DataAsset!
+  secretType: String!
+  description: String
+  exposed: Boolean!
+  redactedValue: String
+  confidence: Float!
+  detectedAt: DateTime!
+}
+
+# ─── Threat Detection ────────────────────────────────────────────────────────
+
+type MalwareDetection {
+  id: ID!
+  asset: CloudAsset!
+  malwareType: String!
+  malwareName: String
+  filePath: String!
+  fileHash: String
+  severity: AlertSeverityLevel!
+  detectedAt: DateTime!
+  quarantined: Boolean!
+  alert: Alert
+}
+
+type LateralMovement {
+  id: ID!
+  sourceAsset: CloudAsset!
+  targetAsset: CloudAsset!
+  technique: String!
+  description: String
+  riskScore: Float!
+  requirements: [String!]
+  alert: Alert
+  detectedAt: DateTime!
+}
+
+# ─── Identity and Access ─────────────────────────────────────────────────────
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  role: String!
+  businessUnits: [String!]
+  mfaEnabled: Boolean!
+  lastLoginAt: DateTime
+  createdAt: DateTime!
+  active: Boolean!
+}
+
+type IAMUser {
+  id: ID!
+  username: String!
+  cloudAccount: CloudAccount!
+  cloudProvider: CloudProviderName!
+  arn: String
+  active: Boolean!
+  mfaEnabled: Boolean!
+  lastActivityAt: DateTime
+  createdAt: DateTime
+  passwordLastUsedAt: DateTime
+  accessKeys: [APIKey!]
+  attachedPolicies: [String!]
+  groups: [String!]
+  permissionLevel: IAMPermissionLevel!
+  alerts: [Alert!]
+}
+
+type IAMRole {
+  id: ID!
+  name: String!
+  cloudAccount: CloudAccount!
+  cloudProvider: CloudProviderName!
+  arn: String
+  description: String
+  trustPolicy: JSON
+  attachedPolicies: [String!]
+  permissionLevel: IAMPermissionLevel!
+  crossAccount: Boolean!
+  lastUsedAt: DateTime
+  createdAt: DateTime
+  alerts: [Alert!]
+}
+
+type Credential {
+  id: ID!
+  credentialType: String!
+  asset: CloudAsset
+  iamUser: IAMUser
+  exposed: Boolean!
+  active: Boolean!
+  createdAt: DateTime
+  lastUsedAt: DateTime
+  expiresAt: DateTime
+  alerts: [Alert!]
+}
+
+type APIKey {
+  id: ID!
+  iamUser: IAMUser!
+  keyId: String!
+  status: String!
+  exposed: Boolean!
+  lastUsedAt: DateTime
+  createdAt: DateTime!
+  rotationRequired: Boolean!
+  alerts: [Alert!]
+}
+
+type Token {
+  id: ID!
+  tokenType: String!
+  scope: [String!]
+  issuedAt: DateTime
+  expiresAt: DateTime
+  expired: Boolean!
+  asset: CloudAsset
+  alerts: [Alert!]
+}
+
+# ─── Integrations ────────────────────────────────────────────────────────────
+
+type Webhook {
+  id: ID!
+  name: String!
+  url: URL!
+  enabled: Boolean!
+  secretConfigured: Boolean!
+  eventTypes: [String!]!
+  headers: JSON
+  lastTriggeredAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Integration {
+  id: ID!
+  name: String!
+  integrationType: IntegrationType!
+  enabled: Boolean!
+  configuration: JSON
+  lastSyncAt: DateTime
+  status: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ─── Root Types ───────────────────────────────────────────────────────────────
+
+type Query {
+  # Assets
+  asset(id: ID!): CloudAsset
+  assetDetails(id: ID!): AssetDetails
+  assets(
+    accountId: ID
+    assetType: AssetType
+    region: String
+    cloudProvider: CloudProviderName
+    internetFacing: Boolean
+    riskScoreMin: Float
+    first: Int
+    after: String
+  ): AssetConnection!
+  vm(id: ID!): VM
+  container(id: ID!): Container
+  storage(id: ID!): Storage
+  database(id: ID!): Database
+  function(id: ID!): Function
+  network(id: ID!): Network
+  loadBalancer(id: ID!): LoadBalancer
+
+  # Cloud Accounts
+  cloudAccount(id: ID!): CloudAccount
+  cloudAccounts(provider: CloudProviderName, status: String): [CloudAccount!]!
+  cloudProviders: [CloudProvider!]!
+
+  # Alerts
+  alert(id: ID!): Alert
+  alertDetails(id: ID!): AlertDetails
+  alerts(
+    severity: AlertSeverityLevel
+    status: AlertStatusValue
+    category: AlertCategoryName
+    assetId: ID
+    accountId: ID
+    first: Int
+    after: String
+  ): AlertConnection!
+  alertTypes(category: AlertCategoryName): [AlertType!]!
+
+  # Risk
+  risk(assetId: ID!): Risk
+  riskScore(assetId: ID!): RiskScore
+
+  # Vulnerabilities
+  vulnerability(id: ID!): Vulnerability
+  vulnerabilities(
+    assetId: ID
+    severity: AlertSeverityLevel
+    hasExploit: Boolean
+    first: Int
+    after: String
+  ): VulnerabilityConnection!
+  cve(id: String!): CVE
+
+  # Compliance
+  compliance(frameworkId: ID!, accountId: ID): Compliance
+  frameworks: [Framework!]!
+  framework(id: ID!): Framework
+  findings(
+    assetId: ID
+    frameworkId: ID
+    status: ComplianceStatusValue
+    severity: AlertSeverityLevel
+    first: Int
+    after: String
+  ): FindingConnection!
+
+  # Policies
+  policy(id: ID!): Policy
+  policies(category: AlertCategoryName, enabled: Boolean): [Policy!]!
+  policyViolations(
+    policyId: ID
+    assetId: ID
+    status: RemediationStatusValue
+    first: Int
+    after: String
+  ): PolicyViolationConnection!
+
+  # Attack Paths
+  attackPath(id: ID!): AttackPath
+  attackPaths(
+    assetId: ID
+    accountId: ID
+    severity: AlertSeverityLevel
+    first: Int
+    after: String
+  ): AttackPathConnection!
+  attackSurface(accountId: ID!): AttackSurface
+
+  # Data Security
+  dataAsset(id: ID!): DataAsset
+  dataAssets(assetId: ID, sensitivity: DataSensitivity): [DataAsset!]!
+  piiFindings(assetId: ID, first: Int, after: String): PIIConnection!
+  secretsFindings(assetId: ID, exposed: Boolean): [Secrets!]!
+
+  # Threat Detection
+  malwareDetections(
+    assetId: ID
+    accountId: ID
+    first: Int
+    after: String
+  ): MalwareConnection!
+  lateralMovements(sourceAssetId: ID, accountId: ID): [LateralMovement!]!
+
+  # Identity
+  iamUser(id: ID!): IAMUser
+  iamUsers(accountId: ID, permissionLevel: IAMPermissionLevel): [IAMUser!]!
+  iamRole(id: ID!): IAMRole
+  iamRoles(accountId: ID, crossAccount: Boolean): [IAMRole!]!
+  apiKeys(iamUserId: ID, exposed: Boolean): [APIKey!]!
+
+  # Platform
+  currentUser: User
+  users: [User!]!
+  webhooks: [Webhook!]!
+  integrations(integrationType: IntegrationType): [Integration!]!
+  discovery(id: ID!): Discovery
+  discoveries(accountId: ID, first: Int, after: String): DiscoveryConnection!
+}
+
+type Mutation {
+  # Alert management
+  updateAlertStatus(alertId: ID!, status: AlertStatusValue!, comment: String): Alert!
+  dismissAlert(alertId: ID!, reason: String!): Alert!
+  reopenAlert(alertId: ID!): Alert!
+
+  # Remediation
+  createRemediation(alertId: ID!, assigneeId: ID, dueDate: DateTime, notes: String): Remediation!
+  updateRemediationStatus(remediationId: ID!, status: RemediationStatusValue!, reason: String): Remediation!
+
+  # Policy management
+  createPolicy(name: String!, description: String, category: AlertCategoryName!, severity: AlertSeverityLevel!, rule: JSON!): Policy!
+  updatePolicy(id: ID!, name: String, description: String, enabled: Boolean, severity: AlertSeverityLevel): Policy!
+  deletePolicy(id: ID!): Boolean!
+
+  # Integrations
+  createWebhook(name: String!, url: URL!, eventTypes: [String!]!, secret: String, headers: JSON): Webhook!
+  updateWebhook(id: ID!, name: String, url: URL, enabled: Boolean, eventTypes: [String!]): Webhook!
+  deleteWebhook(id: ID!): Boolean!
+  createIntegration(name: String!, integrationType: IntegrationType!, configuration: JSON!): Integration!
+  updateIntegration(id: ID!, name: String, enabled: Boolean, configuration: JSON): Integration!
+  deleteIntegration(id: ID!): Boolean!
+
+  # User management
+  inviteUser(email: String!, role: String!, businessUnits: [String!]): User!
+  updateUser(id: ID!, role: String, businessUnits: [String!]): User!
+  deactivateUser(id: ID!): User!
+}
+
+# ─── Connection Types ─────────────────────────────────────────────────────────
+
+type AssetConnection {
+  nodes: [CloudAsset!]!
+  pageInfo: PageInfo!
+}
+
+type VulnerabilityConnection {
+  nodes: [Vulnerability!]!
+  pageInfo: PageInfo!
+}
+
+type FindingConnection {
+  nodes: [Finding!]!
+  pageInfo: PageInfo!
+}
+
+type PolicyViolationConnection {
+  nodes: [PolicyViolation!]!
+  pageInfo: PageInfo!
+}
+
+type AttackPathConnection {
+  nodes: [AttackPath!]!
+  pageInfo: PageInfo!
+}
+
+type PIIConnection {
+  nodes: [PIIData!]!
+  pageInfo: PageInfo!
+}
+
+type MalwareConnection {
+  nodes: [MalwareDetection!]!
+  pageInfo: PageInfo!
+}
+
+type DiscoveryConnection {
+  nodes: [Discovery!]!
+  pageInfo: PageInfo!
+}

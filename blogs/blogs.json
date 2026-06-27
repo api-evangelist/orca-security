@@ -2,17 +2,17 @@
   "repo": "orca-security",
   "feeds": [
     {
-      "source": "https://orca.security/resources/blog/",
+      "source": "https://orca.security/resources/blog/feed/",
       "feed_url": "https://orca.security/resources/blog/feed/",
       "title": "",
       "saved": 10,
-      "method": "discovered"
+      "method": "feed"
     },
     {
       "source": "https://trust.orca.security/",
       "error": "URLError"
     }
   ],
-  "post_count": 10,
-  "fetched": "2026-06-14T20:42:17Z"
+  "post_count": 30,
+  "fetched": "2026-06-27T12:03:07Z"
 }

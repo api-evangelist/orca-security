@@ -66,6 +66,10 @@ apis:
   - type: Documentation
     url: https://docs.orcasecurity.io/
 common:
+- type: VulnerabilityDisclosure
+  url: security/orca-security-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/orca-security-domain-security.yml
 - type: Website
   url: https://orca.security/
 - type: Platform

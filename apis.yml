@@ -8,7 +8,19 @@ description: Orca Security is an agentless cloud security platform that uses its
   automations, and user management, plus SCIM 2.0 for identity provisioning and a
   Terraform provider for infrastructure-as-code workflows.
 kind: company
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: free
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Free
+  confidence: medium
+  source:
+  - plans
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/orca-security.png
 tags:
 - Agentless
 - API Security

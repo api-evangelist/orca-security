@@ -51,6 +51,13 @@ apis:
   - Assets
   - Automations
   - Cloud Security
+  - Integration
+  - REST API
+  tags_raw:
+  - Alerts
+  - Assets
+  - Automations
+  - Cloud Security
   - Integrations
   - REST API
   properties:

@@ -60,7 +60,7 @@ apis:
   tags:
   - Alerts
   - Assets
-  - Automations
+  - Automation
   - Cloud Security
   - Integration
   - REST API

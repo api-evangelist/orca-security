@@ -80,8 +80,6 @@ apis:
     url: https://docs.orcasecurity.io/docs/orca-api
   - type: TerraformProvider
     url: https://registry.terraform.io/providers/orcasecurity/orcasecurity/latest/docs
-  - url: graphql/orca-security-graphql.md
-    type: GraphQL
 - aid: orca-security:orca-security-scim-api
   name: Orca Security SCIM 2.0 API
   description: SCIM 2.0 endpoint for provisioning and de-provisioning users and groups

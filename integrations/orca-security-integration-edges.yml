@@ -16,39 +16,6 @@ checked:
 - palo-alto-networks/integrations/palo-alto-networks-integration-edges.yml
 marketplace_apps: []
 edges:
-- partner_name: AWS Marketplace
-  partner: amazon-web-services
-  partner_match: aggregator
-  type: marketplace
-  marketplace: aws-marketplace
-  channel: distribution
-  relationship: distribution-channel
-  direction: third-party
-  evidence: https://aws.amazon.com/marketplace/seller-profile?id=0299ba26-6d8b-42be-85b8-5d1e72b889e5
-  listing_count: 3
-  apps:
-  - Orca Security CNAPP Cloud Security Platform
-  - Orca Security CNAPP Cloud Security Platform - Unique Expansion
-  - Orca Security CNAPP Cloud Security Platform - GovCloud
-  seller_name: Orca Security CNAPP
-  detected_by: sweep-cloud-marketplaces.py
-  detected: '2026-10-13'
-- partner_name: Microsoft Azure Marketplace
-  partner: microsoft-azure
-  partner_match: aggregator
-  type: marketplace
-  marketplace: azure-marketplace
-  channel: distribution
-  relationship: distribution-channel
-  direction: third-party
-  evidence: https://azuremarketplace.microsoft.com/en-us/marketplace/apps?search=Orca%20Security%2C%20Inc.
-  listing_count: 2
-  apps:
-  - Orca Security Alerts
-  - Orca Security
-  seller_name: Orca Security, Inc.
-  detected_by: sweep-cloud-marketplaces.py
-  detected: '2026-10-13'
 - partner_name: GitHub Marketplace (actions)
   partner: github-actions
   partner_match: aggregator
@@ -123,39 +90,25 @@ edges:
   category: Cloud Security
   badges:
   - support:partner
-- partner_name: CNCF (Cloud Native Landscape)
-  partner: cncf
-  partner_match: register
-  type: register
-  direction: partner-built
-  category: Cloud native landscape
-  evidence: https://github.com/cncf/landscape/blob/3a7d378b1824b82e729a453bb03fa6f1e37557e1/landscape.yml
-  channel: standard-directory
-  relationship: standard-participant
-  contract_reference:
-    register: CNCF Cloud Native Landscape (github.com/cncf/landscape landscape.yml @3a7d378b18)
-    spec_file: null
-    standard: Cloud Native (CNCF)
-    role: landscape-listed
-    registered_name: Orca Security
-    registered_names:
-    - Orca Security
-    website: https://orca.security
-    matched_domain: orca.security
-    matched_by: domain
-    member_tier: null
-    joined: null
-    end_user: false
-    cncf_projects: []
-    landscape_categories:
-    - Provisioning / Security & Compliance
-    landscape_entries: 1
-    signal_note: 'participation only: a landscape listing is standard-participant evidence, not depth. Entries,
-      categories, tier and projects are CONTEXT, never read (breadth is not credit)'
-    detected_by: sweep-cloud-native.py
-    detected: '2026-10-15'
-  detected_by: sweep-cloud-native.py
-  first_seen: '2026-10-15'
+- partner_name: Microsoft Teams (own)
+  partner: microsoft-teams
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://appsource.microsoft.com/en-us/product/office/WA200004132
+  mirror_of: microsoft-teams/integrations/microsoft-teams-integration-edges.yml
+  apps:
+  - Orca Security
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Microsoft Teams app
+  publisher_verified:
+  - Microsoft 365 Publisher Attestation
 - partner_name: FedRAMP
   partner: null
   partner_match: register
@@ -224,25 +177,72 @@ edges:
       latest_authorization: '2024-07-07'
   detected_by: sweep-gov-cloud.py
   first_seen: '2026-10-15'
-- partner_name: Microsoft Teams (own)
-  partner: microsoft-teams
-  partner_match: mirror
-  mirror_match: domain
+- partner_name: AWS Marketplace
+  partner: amazon-web-services
+  partner_match: aggregator
   type: marketplace
-  relationship: platform-app
+  marketplace: aws-marketplace
+  channel: distribution
+  relationship: distribution-channel
   direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://appsource.microsoft.com/en-us/product/office/WA200004132
-  mirror_of: microsoft-teams/integrations/microsoft-teams-integration-edges.yml
+  evidence: https://aws.amazon.com/marketplace/seller-profile?id=0299ba26-6d8b-42be-85b8-5d1e72b889e5
+  listing_count: 3
+  apps:
+  - Orca Security CNAPP Cloud Security Platform
+  - Orca Security CNAPP Cloud Security Platform - Unique Expansion
+  - Orca Security CNAPP Cloud Security Platform - GovCloud
+  seller_name: Orca Security CNAPP
+  detected_by: sweep-cloud-marketplaces.py
+  detected: '2026-10-13'
+- partner_name: Microsoft Azure Marketplace
+  partner: microsoft-azure
+  partner_match: aggregator
+  type: marketplace
+  marketplace: azure-marketplace
+  channel: distribution
+  relationship: distribution-channel
+  direction: third-party
+  evidence: https://azuremarketplace.microsoft.com/en-us/marketplace/apps?search=Orca%20Security%2C%20Inc.
+  listing_count: 2
   apps:
   - Orca Security
-  listing_count: 1
-  detected: '2026-10-18'
-  detected_by: mirror-platform-listings.py
-  category: Microsoft Teams app
-  publisher_verified:
-  - Microsoft 365 Publisher Attestation
+  - Orca Security Alerts
+  seller_name: Orca Security, Inc.
+  detected_by: sweep-cloud-marketplaces.py
+  detected: '2026-10-13'
+- partner_name: CNCF (Cloud Native Landscape)
+  partner: cncf
+  partner_match: register
+  type: register
+  direction: partner-built
+  category: Cloud native landscape
+  evidence: https://github.com/cncf/landscape/blob/42dd4cd91dad8ec8558ac02467a43f0805b9957a/landscape.yml
+  channel: standard-directory
+  relationship: standard-participant
+  contract_reference:
+    register: CNCF Cloud Native Landscape (github.com/cncf/landscape landscape.yml @42dd4cd91d)
+    spec_file: null
+    standard: Cloud Native (CNCF)
+    role: landscape-listed
+    registered_name: Orca Security
+    registered_names:
+    - Orca Security
+    website: https://orca.security
+    matched_domain: orca.security
+    matched_by: domain
+    member_tier: null
+    joined: null
+    end_user: false
+    cncf_projects: []
+    landscape_categories:
+    - Provisioning / Security & Compliance
+    landscape_entries: 1
+    signal_note: 'participation only: a landscape listing is standard-participant evidence, not depth. Entries,
+      categories, tier and projects are CONTEXT, never read (breadth is not credit)'
+    detected_by: sweep-cloud-native.py
+    detected: '2026-10-19'
+  detected_by: sweep-cloud-native.py
+  first_seen: '2026-10-15'
 source:
 - https://github.com/marketplace?type=actions
 - https://marketplace.atlassian.com/

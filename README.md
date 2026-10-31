@@ -1,4 +1,4 @@
-# orca-security
+# Orca Security
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,4 +64,112 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Orca Security — agentless cloud security with SideScanning
+Orca Security is an agentless cloud security platform that uses its patented SideScanning technology to provide visibility into risks across AWS, Azure, Google Cloud, Oracle Cloud, Kubernetes, and serverless environments, covering CSPM, CWPP, CIEM, DSPM, vulnerability management, malware detection, API security, and AI security in a single platform. Orca exposes a region-aware REST API for assets, alerts, integrations, automations, and user management, plus SCIM 2.0 for identity provisioning and a Terraform provider for infrastructure-as-code workflows.
+
+**Areas:** Agentless · API Security · CIEM · Cloud Security · CNAPP · CSPM · CWPP · DSPM · SideScanning · Vulnerability Management
+
+## Orca Security on APIs.io
+
+Everything profiled for Orca Security is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/orca-security/](https://apis.io/providers/orca-security/)** — or go straight to one of the APIs or properties below.
+
+### APIs (2)
+
+- [Orca Security REST API](https://apis.io/apis/orca-security/orca-security-rest-api/) — Orca Security's REST API provides programmatic access to the Orca Cloud Security Platform for querying cloud inventory and assets, managing alerts and risk…
+- [Orca Security SCIM 2.0 API](https://apis.io/apis/orca-security/orca-security-scim-api/) — SCIM 2.0 endpoint for provisioning and de-provisioning users and groups in Orca Security from identity providers such as Okta, Azure AD, and OneLogin.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### GraphQL (1)
+
+GraphQL schemas.
+
+- [Moved to /providers/orca-security/](https://apis.io/graphqls/orca-security/orca-security-graphql/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Orca Security Domain Security](https://apis.io/security/orca-security/orca-security-domain-security/)
+- [Orca Security Vulnerability Disclosure](https://apis.io/security/orca-security/orca-security-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Orca Security Plans Pricing](https://apis.io/plans/orca-security/orca-security-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Orca Security Rate Limits](https://apis.io/rate-limits/orca-security/orca-security-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Orca Security Finops](https://apis.io/finops/orca-security/orca-security-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://orca.security/)
+- [Documentation](https://docs.orcasecurity.io/)
+- [Blog](https://orca.security/resources/blog/)
+- [Trust centre](https://trust.orca.security/)
+
+## API Evangelist rating
+
+**Kin Score 10.8** — minimal · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 57.1 |
+| Contract quality | 0.0 |
+| Contract governance | 0.0 |
+| Operational transparency | 5.3 |
+| Developer ergonomics | 2.4 |
+| Access clarity | 15.8 |
+
+**Agent readiness 3.1** — human-only
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 20.1** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/orca-security/](https://apis.io/providers/orca-security/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Orca Security: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/orca-security/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
